@@ -106,7 +106,7 @@ export const listUsers = async (
   res.json({ users });
 }
 
-export const userProfile = async (
+export const userDetails = async (
   req: Request,
   res: Response
 ) => {

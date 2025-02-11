@@ -18,6 +18,10 @@ const {
   PORT
 } = process.env;
 
+/* setInterval(() => {
+  console.log("Rodou...");
+}, 5000); */
+
 app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
 });

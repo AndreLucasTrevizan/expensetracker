@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import { authMiddleware } from '../../middlewares/auth';
-import { createUser, listUsers, userProfile, userSignIn } from './controller';
+import { createUser, listUsers, userDetails, userSignIn } from './controller';
 
 const router = Router();
 
 router
   .route('/users')
   .get(authMiddleware, listUsers)
-  .post(authMiddleware, createUser);
+  .post(createUser);
 
 router
-  .route('/users/profile')
-  .get(authMiddleware, userProfile);
+  .route('/users/details')
+  .get(authMiddleware, userDetails);
 
 router
   .route('/sign_in')

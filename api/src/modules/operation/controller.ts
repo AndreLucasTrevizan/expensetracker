@@ -12,3 +12,25 @@ export const listOperations = async (
 
   res.json({ operations });
 }
+
+export const createOperation = async (
+  req: Request,
+  res: Response,
+) => {
+
+  const {
+    name
+  } = req.body;
+
+  if (name == "") {
+    throw new Error("Preencha o campo nome");
+  }
+
+  const new_operation = await prisma.operation.create({
+    data: {
+      name,
+    }
+  });
+
+  res.status(201).json({ new_operation });
+}
