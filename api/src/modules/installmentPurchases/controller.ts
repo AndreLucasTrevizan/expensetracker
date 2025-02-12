@@ -3,7 +3,6 @@ import {
   Response
 } from 'express';
 import { prisma } from '../../prisma';
-import { Prisma } from '@prisma/client';
 
 export const createNewInstallmentPurchase = async (
   req: Request,
@@ -15,37 +14,71 @@ export const createNewInstallmentPurchase = async (
     amountOfInstallment,
     installmentValue,
     totalExpense,
+    partPayed,
+    installmentsPayed,
+    onCard,
     dueDay
   } = req.body;
 
   if (description == "") {
-    throw new Error("Preencha o campo descrição");
+    throw new Error("Preencha o campo 'Descrição'");
   }
 
   if (amountOfInstallment == "") {
-    throw new Error("Preencha o campo Quantidade de Parcelas");
+    throw new Error("Preencha o campo 'Quantidade de Parcelas'");
   }
 
   if (totalExpense == "") {
-    throw new Error("Preencha o campo Preço Total");
+    throw new Error("Preencha o campo 'Preço Total'");
   }
   
   if (dueDay == "") {
-    throw new Error("Preencha o campo Data de Vencimento da Parcela");
+    throw new Error("Preencha o campo 'Data de Vencimento da Parcela'");
+  }
+  
+  if (onCard == "") {
+    throw new Error("Preencha o campo 'Parcelado no Cartão?'");
   }
 
-  const newInstallmentPurchase = await prisma.installmentPurchases.create({
-    data: {
-      description,
-      amountOfInstallment: Number(amountOfInstallment),
-      installmentValue: Number(installmentValue),
-      totalExpense: Number(totalExpense),
-      dueDay: Number(dueDay),
-      userId: req.user.id,
+  if (partPayed != undefined && partPayed != "") {
+    if (installmentsPayed == "") {
+      throw new Error("Preencha o campo 'Quantidade de Parcelas Pagas'");
     }
-  });
+    
+    const newInstallmentPurchase = await prisma.installmentPurchases.create({
+      data: {
+        description,
+        amountOfInstallment: Number(amountOfInstallment),
+        installmentValue: Number(installmentValue),
+        totalExpense: Number(totalExpense),
+        partPayed: true,
+        installmentsPayed: Number(installmentsPayed),
+        onCard: (onCard == "true") ? true : false,
+        dueDay: Number(dueDay),
+        userId: req.user.id,
+      }
+    });
 
-  res.status(201).json({ newInstallmentPurchase });
+    
+
+    res.status(201).json({ newInstallmentPurchase });
+  } else {
+
+
+    const newInstallmentPurchase = await prisma.installmentPurchases.create({
+      data: {
+        description,
+        amountOfInstallment: Number(amountOfInstallment),
+        installmentValue: Number(installmentValue),
+        totalExpense: Number(totalExpense),
+        onCard: (onCard == "true") ? true : false,
+        dueDay: Number(dueDay),
+        userId: req.user.id,
+      }
+    });
+  
+    res.status(201).json({ newInstallmentPurchase });
+  }
 }
 
 export const listUserInstallmentPurchase = async (
@@ -59,6 +92,9 @@ export const listUserInstallmentPurchase = async (
       id: true,
       description: true,
       amountOfInstallment: true,
+      partPayed: true,
+      installmentsPayed: true,
+      onCard: true,
       dueDay: true,
       installmentValue: true,
       totalExpense: true,
@@ -68,3 +104,5 @@ export const listUserInstallmentPurchase = async (
 
   res.status(201).json({ installmentPurchases });
 }
+
+

@@ -59,6 +59,9 @@ model InstallmentPurchases {
   installmentValue Decimal @db.Decimal(9,2) //250.23
   totalExpense Decimal @db.Decimal(9,2) //3502.20
   isPayed Boolean @default(false) //false
+  partPayed Boolean @default(false)
+  installmentsPayed Int?
+  onCard Boolean @default(true)
   dueDay Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -77,6 +80,7 @@ model Payments {
   userId Int
   operationId Int
   installmentPurchaseId Int?
+  invoice Boolean @default(false)
   user User @relation(fields: [userId], references: [id])
   operation Operation @relation(fields: [operationId], references: [id])
   installmentPurchase InstallmentPurchases? @relation(fields: [installmentPurchaseId], references: [id])

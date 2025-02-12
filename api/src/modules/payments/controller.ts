@@ -62,7 +62,7 @@ export const createNewPayment = async (
     throw new Error("Não á saldo o suficiente para efetuar o pagamento");
   }
 
-  if (Boolean(isInstallment)) {
+  if (isInstallment == "true") {
     const installmentPurchase = await prisma.installmentPurchases.findFirst({
       where: { id: installmentPurchaseId }
     });
@@ -75,7 +75,7 @@ export const createNewPayment = async (
       data: {
         description,
         price: Number(price),
-        isIstallment: Boolean(isInstallment),
+        isIstallment: true,
         installmentPurchaseId: installmentPurchase.id,
         operationId: operation.id,
         userId: req.user.id,
@@ -95,8 +95,8 @@ export const createNewPayment = async (
       data: {
         description,
         price,
-        isIstallment: Boolean(isInstallment),
-        installmentPurchaseId: Boolean(isInstallment) ? installmentPurchaseId : null,
+        isIstallment: false,
+        installmentPurchaseId: null,
         operationId: operation.id,
         userId: req.user.id,
       }
@@ -111,4 +111,23 @@ export const createNewPayment = async (
 
     res.status(201).json({ newPayment });
   }
+}
+
+export const listUserPayments = async (
+  req: Request,
+  res: Response,
+) => {
+
+  const payments = await prisma.payments.findMany({
+    where: { userId: req.user.id },
+    select: {
+      id: true,
+      description: true,
+      price: true,
+      isIstallment: true,
+      createdAt: true,
+    }
+  });
+
+  res.json({ payments });
 }
