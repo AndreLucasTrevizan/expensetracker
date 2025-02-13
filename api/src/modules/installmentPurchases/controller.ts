@@ -59,12 +59,40 @@ export const createNewInstallmentPurchase = async (
       }
     });
 
-    
+    if (onCard == "true" && installmentsPayed != null) {
+      const pendingInstallments = amountOfInstallment - installmentsPayed;
+      const actualMonth = new Date(Date.now()).getMonth();
+
+      const operation = await prisma.operation.findFirst({
+        where: {
+          name: 'Cartão',
+        }
+      });
+
+      if (!operation) {
+        throw new Error("Operação inválida");
+      }
+
+      for (let i = 1; i <= pendingInstallments; i++) {
+        let newMonth = new Date(Date.now()).setMonth(actualMonth + i);
+
+        await prisma.payments.create({
+          data: {
+            description,
+            price: Number(installmentValue),
+            isIstallment: true,
+            installmentPurchaseId: newInstallmentPurchase.id,
+            operationId: operation.id,
+            userId: req.user.id,
+            createdAt: new Date(newMonth),
+            invoice: true,
+          }
+        });
+      }
+    }
 
     res.status(201).json({ newInstallmentPurchase });
   } else {
-
-
     const newInstallmentPurchase = await prisma.installmentPurchases.create({
       data: {
         description,

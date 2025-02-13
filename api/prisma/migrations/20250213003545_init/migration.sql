@@ -63,6 +63,7 @@ CREATE TABLE `payments` (
     `userId` INTEGER NOT NULL,
     `operationId` INTEGER NOT NULL,
     `installmentPurchaseId` INTEGER NULL,
+    `invoice` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
