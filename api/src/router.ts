@@ -5,6 +5,7 @@ import { TotalsRouter } from './modules/totals/router';
 import { RevenueRouter } from './modules/revenue/router';
 import { PaymentsRouter } from './modules/payments/router';
 import { InstallmentPurchasesRouter } from './modules/installmentPurchases/router';
+import { InvoicesRouter } from './modules/invoices/router';
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use(TotalsRouter);
 router.use(RevenueRouter);
 router.use(PaymentsRouter);
 router.use(InstallmentPurchasesRouter);
+router.use(InvoicesRouter);
 
 export default router;

@@ -40,6 +40,16 @@ export const createNewInstallmentPurchase = async (
     throw new Error("Preencha o campo 'Parcelado no Cartão?'");
   }
 
+  const operation = await prisma.operation.findFirst({
+    where: {
+      name: 'Cartão',
+    }
+  });
+
+  if (!operation) {
+    throw new Error("Operação inválida");
+  }
+
   if (partPayed != undefined && partPayed != "") {
     if (installmentsPayed == "") {
       throw new Error("Preencha o campo 'Quantidade de Parcelas Pagas'");
@@ -63,16 +73,6 @@ export const createNewInstallmentPurchase = async (
       const pendingInstallments = amountOfInstallment - installmentsPayed;
       const actualMonth = new Date(Date.now()).getMonth();
 
-      const operation = await prisma.operation.findFirst({
-        where: {
-          name: 'Cartão',
-        }
-      });
-
-      if (!operation) {
-        throw new Error("Operação inválida");
-      }
-
       for (let i = 1; i <= pendingInstallments; i++) {
         let newMonth = new Date(Date.now()).setMonth(actualMonth + i);
 
@@ -89,9 +89,11 @@ export const createNewInstallmentPurchase = async (
           }
         });
       }
-    }
 
-    res.status(201).json({ newInstallmentPurchase });
+      res.status(201).json({ newInstallmentPurchase });
+    } else {
+      res.status(201).json({ newInstallmentPurchase });
+    }
   } else {
     const newInstallmentPurchase = await prisma.installmentPurchases.create({
       data: {

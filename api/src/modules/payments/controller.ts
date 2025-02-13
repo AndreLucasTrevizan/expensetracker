@@ -16,6 +16,7 @@ export const createNewPayment = async (
     isInstallment,
     installmentPurchaseId,
     operationId,
+    invoice
   } = req.body;
 
   if (description == "") {
@@ -64,7 +65,7 @@ export const createNewPayment = async (
 
   if (isInstallment == "true") {
     const installmentPurchase = await prisma.installmentPurchases.findFirst({
-      where: { id: installmentPurchaseId }
+      where: { id: Number(installmentPurchaseId) }
     });
 
     if (!installmentPurchase) {
@@ -74,7 +75,7 @@ export const createNewPayment = async (
     const newPayment = await prisma.payments.create({
       data: {
         description,
-        price: Number(price),
+        price: new Prisma.Decimal(price),
         isIstallment: true,
         installmentPurchaseId: installmentPurchase.id,
         operationId: operation.id,
@@ -90,6 +91,30 @@ export const createNewPayment = async (
     });
 
     res.status(201).json({ newPayment });
+  } else if (isInstallment == "false" && invoice == "true") {
+    const card_operation = await prisma.operation.findFirst({
+      where: {
+        name: "Cartão",
+      }
+    });
+
+    if (!card_operation) {
+      throw new Error("Operação inválida");
+    } else {
+      const newPayment = await prisma.payments.create({
+        data: {
+          description,
+          price,
+          isIstallment: false,
+          installmentPurchaseId: null,
+          operationId: card_operation.id,
+          userId: req.user.id,
+          invoice: true,
+        }
+      });
+
+      res.status(201).json({ newPayment });
+    }
   } else {
     const newPayment = await prisma.payments.create({
       data: {
@@ -99,6 +124,7 @@ export const createNewPayment = async (
         installmentPurchaseId: null,
         operationId: operation.id,
         userId: req.user.id,
+        invoice: true,
       }
     });
 
@@ -117,17 +143,49 @@ export const listUserPayments = async (
   req: Request,
   res: Response,
 ) => {
+  let month = req.query.month as string;//1
+  let invoice = req.query.invoice as string;//1
+  let monthGt = 0;
 
-  const payments = await prisma.payments.findMany({
-    where: { userId: req.user.id },
-    select: {
-      id: true,
-      description: true,
-      price: true,
-      isIstallment: true,
-      createdAt: true,
+  if (month && month != "") {
+    for (let i = 0; i <= 12; i++) {
+      if (i+1 == Number(month)) {
+        monthGt = i;
+      }
     }
-  });
 
-  res.json({ payments });
+    const payments = await prisma.payments.findMany({
+      where: {
+        userId: req.user.id,
+        createdAt: {
+          gt: new Date(new Date().setMonth(monthGt-1)),
+          lt: new Date(new Date().setMonth(monthGt)),
+        },
+        invoice: (invoice == "true") ? true : false,
+      },
+      select: {
+        id: true,
+        description: true,
+        price: true,
+        isIstallment: true,
+        invoice: true,
+        createdAt: true,
+      }
+    });
+
+    res.json({ payments });
+  } else {
+    const payments = await prisma.payments.findMany({
+      where: { userId: req.user.id },
+      select: {
+        id: true,
+        description: true,
+        price: true,
+        isIstallment: true,
+        createdAt: true,
+      }
+    });
+
+    res.json({ payments });
+  }
 }

@@ -56,4 +56,21 @@ DELIMITER ;*/
 select * from users;
 select valueWallet-351.23 as bolas from total;
 create database expensetracker;
+select * from payments;
+select sum(price) from payments where userId = 1 and invoice = true and createdAt like '%2025-02';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
