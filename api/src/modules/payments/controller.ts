@@ -146,6 +146,32 @@ export const listUserPayments = async (
 ) => {
   let month = req.query.month as string;//1
   let invoice = req.query.invoice as string;//1
+  let sevenDays = req.query.sevenDays as string;
+
+  if (sevenDays && sevenDays == "true") {
+    let actualDay = new Date().getDate();
+
+    const payments = await prisma.payments.findMany({
+      where: {
+        userId: req.user.id,
+        createdAt: {
+          gt: new Date(),
+          lt: new Date(new Date().setDate(actualDay + 7)),
+        },
+        invoice: (invoice == "true") ? true : false,
+      },
+      select: {
+        id: true,
+        description: true,
+        price: true,
+        isIstallment: true,
+        invoice: true,
+        createdAt: true,
+      }
+    });
+
+    return res.json({ payments });
+  }
 
   if (month && month != "") {
     let monthGt = getMonth(month);
@@ -169,19 +195,19 @@ export const listUserPayments = async (
       }
     });
 
-    res.json({ payments });
-  } else {
-    const payments = await prisma.payments.findMany({
-      where: { userId: req.user.id },
-      select: {
-        id: true,
-        description: true,
-        price: true,
-        isIstallment: true,
-        createdAt: true,
-      }
-    });
-
-    res.json({ payments });
+    return res.json({ payments });
   }
+
+  const payments = await prisma.payments.findMany({
+    where: { userId: req.user.id },
+    select: {
+      id: true,
+      description: true,
+      price: true,
+      isIstallment: true,
+      createdAt: true,
+    }
+  });
+
+  res.json({ payments });
 }
