@@ -3,19 +3,15 @@ import {
   Response
 } from 'express';
 import { prisma } from '../../prisma';
+import { getMonth } from '../../util';
 
 export const listUserTotals = async (
   req: Request,
   res: Response,
 ) => {
   let actualMonth = new Date(Date.now()).getMonth();
-  let month = 0;
-
-  for (let i = 0; i <= 12; i++) {
-    if (i+1 == Number(actualMonth)) {
-      month = i;
-    }
-  }
+  
+  let monthGt = getMonth(String(actualMonth));
 
   const totals = await prisma.total.findFirst({
     where: { userId: req.user.id },
@@ -35,8 +31,8 @@ export const listUserTotals = async (
       userId: req.user.id,
       invoice: true,
       createdAt: {
-        gt: new Date(new Date().setMonth(month-1)),
-        lt: new Date(new Date().setMonth(month)),
+        gt: new Date(new Date().setMonth(monthGt-1)),
+        lt: new Date(new Date().setMonth(monthGt)),
       },
     }
   });

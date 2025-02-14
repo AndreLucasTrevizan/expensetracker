@@ -3,6 +3,7 @@ import {
   Response
 } from 'express';
 import { prisma } from '../../prisma';
+import { getMonth } from '../../util';
 
 export const listMonthInvoices = async (
   req: Request,
@@ -11,13 +12,7 @@ export const listMonthInvoices = async (
 
   const month = req.query.month as string;
 
-  let monthGt = 0;
-
-  for (let i = 0; i < 12; i++) {
-    if (i+1 == Number(month)) {
-      monthGt = i;
-    }
-  }
+  let monthGt = getMonth(month);
 
   const invoices = await prisma.payments.findMany({
     where: { 

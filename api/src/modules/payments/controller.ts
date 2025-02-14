@@ -4,6 +4,7 @@ import {
 } from 'express';
 import { prisma } from '../../prisma';
 import { Prisma } from '@prisma/client';
+import { getMonth } from '../../util';
 
 export const createNewPayment = async (
   req: Request,
@@ -145,14 +146,9 @@ export const listUserPayments = async (
 ) => {
   let month = req.query.month as string;//1
   let invoice = req.query.invoice as string;//1
-  let monthGt = 0;
 
   if (month && month != "") {
-    for (let i = 0; i <= 12; i++) {
-      if (i+1 == Number(month)) {
-        monthGt = i;
-      }
-    }
+    let monthGt = getMonth(month);
 
     const payments = await prisma.payments.findMany({
       where: {
