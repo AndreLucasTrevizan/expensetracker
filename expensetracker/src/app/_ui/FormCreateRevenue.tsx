@@ -1,0 +1,74 @@
+import { createRevenue } from "../_functions/revenue";
+
+export default function FormCreateRevenue() {
+  return (
+    <form
+      action={createRevenue}
+      className="
+        flex
+        flex-col
+        flex-wrap
+        items-start
+        gap-4
+      "
+    >
+      <div
+        className="
+          w-full
+          flex
+          justify-between
+          flex-wrap
+          gap-4
+        "
+      >
+        <div
+          className="
+            flex
+            flex-col
+            flex-1
+          "
+        >
+          <label>Descrição</label>
+          <input
+            type="text"
+            placeholder="Teeste"
+            className="
+              border
+              rounded
+              p-2
+            "
+          />
+        </div>
+        <div
+          className="
+            flex
+            flex-col
+          "
+        >
+          <label>Valor</label>
+          <input
+            type="number"
+            placeholder="Teeste"
+            className="
+              border
+              rounded
+              p-2
+            "
+          />
+        </div>
+      </div>
+      <button
+        onSubmit={() => {}}
+        className="
+          px-4
+          py-2
+          bg-blue-500
+          font-bold
+          text-white
+          h-max
+          rounded
+        "
+      >Adicionar</button>
+    </form>
+  );
+}

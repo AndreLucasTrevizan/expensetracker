@@ -1,10 +1,7 @@
 
 import Link from 'next/link';
 import {
-  FaBarcode,
-  FaGear,
-  FaFileInvoice,
-  FaMoneyBill1Wave,
+  FaPlus,
 } from 'react-icons/fa6';
 
 export interface OptionType {
@@ -15,35 +12,19 @@ export interface OptionType {
 
 const options: OptionType[] = [
   {
-    route: "/",
-    name: "Pagamentos",
-    icon: <FaBarcode size={30} color='#3b82f6' />
+    route: "/revenue/new",
+    name: "Nova Receita",
+    icon: <FaPlus size={30} color='#3b82f6' />
   },
-  {
-    route: "/",
-    name: "Fatura",
-    icon: <FaFileInvoice size={30} color='#3b82f6' />
-  },
-  {
-    route: "/revenue",
-    name: "Receita",
-    icon: <FaMoneyBill1Wave size={30} color='#3b82f6' />
-  },
-  {
-    route: "/",
-    name: "Configurações",
-    icon: <FaGear size={30} color='#3b82f6' />
-  }
 ];
 
-export default function OptionsMenu() {
+export default function RevenueMenu() {
   return (
     <div
       className="
         flex
-        gap-4
-        flex-wrap
         justify-between
+        gap-4
       "
     >
       {options.map((option) => <Option key={option.name} option={option} />)}

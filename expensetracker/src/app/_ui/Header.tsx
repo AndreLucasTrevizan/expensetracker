@@ -1,4 +1,12 @@
+"use client";
+
+import { usePathname, useRouter } from "next/navigation";
+import HeaderContent from "./HeaderContent";
+import HeaderSignIn from "./HeaderSignIn";
+
 export default function Header() {
+  const pathname = usePathname();
+
   return (
     <div
       className="
@@ -7,14 +15,8 @@ export default function Header() {
         bg-blue-500
       "
     >
-      <div
-        className="
-          w-3/4
-          py-8
-        "
-      >
-        <h1 className="text-2xl text-white font-bold">Expense Tracker</h1>
-      </div>
+      {pathname !== "/sign_in" && <HeaderContent />}
+      {pathname == "/sign_in" && <HeaderSignIn />}
     </div>
   );
 }
