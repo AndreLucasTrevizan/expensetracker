@@ -3,13 +3,6 @@
 import FormCreateRevenue from "@/app/_ui/FormCreateRevenue";
 
 export default function RevenueNew() {
-
-  async function createRevenue(e: React.FormEvent<HTMLButtonElement>) {
-    e.preventDefault();
-
-
-  }
-
   return (
     <div
       className="

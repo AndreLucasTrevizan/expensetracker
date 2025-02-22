@@ -1,10 +1,13 @@
 "use server";
 
-import { AxiosError } from "axios";
 import { api } from "../_api";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { ErrorHandler } from "../_helper/Error";
 
-export const handleSignIn = async (prevState: any, formData: FormData) => {
+export const handleSignIn = async (prevState: { message: string }, formData: FormData) => {
+  const serverCookies = await cookies();
+
   try {
     const signIn = {
       email: formData.get("email"),
@@ -17,14 +20,16 @@ export const handleSignIn = async (prevState: any, formData: FormData) => {
       }
     });
 
-    redirect('/');
+    const {
+      token
+    } = response.data;
+
+    serverCookies.set("token", token);
   } catch (error) {
-    if (error instanceof AxiosError) {
-      return { message: error.response?.data['msg'] };
-    } else if (error instanceof Error) {
-      return { message: error.message };
-    } else {
-      throw(error);
-    }
+    const errorHandle = new ErrorHandler(error);
+    
+    return errorHandle;
   }
+
+  redirect('/');
 }

@@ -1,9 +1,19 @@
-import { createRevenue } from "../_functions/revenue";
+"use client";
+
+import { useActionState } from "react";
+import { createRevenue } from "../revenue/actions";
+
+const initialState = {
+  message: ''
+};
+
 
 export default function FormCreateRevenue() {
+  const [state, formAction, pending] = useActionState(createRevenue, initialState);
+
   return (
     <form
-      action={createRevenue}
+      action={formAction}
       className="
         flex
         flex-col
@@ -37,6 +47,7 @@ export default function FormCreateRevenue() {
               rounded
               p-2
             "
+            name="description"
           />
         </div>
         <div
@@ -54,6 +65,7 @@ export default function FormCreateRevenue() {
               rounded
               p-2
             "
+            name="value"
           />
         </div>
       </div>
@@ -68,7 +80,8 @@ export default function FormCreateRevenue() {
           h-max
           rounded
         "
-      >Adicionar</button>
+      >{pending ? "Carregando" : "Criar"}</button>
+      <div>{state?.message}</div>
     </form>
   );
 }
