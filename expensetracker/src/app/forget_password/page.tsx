@@ -1,15 +1,15 @@
 "use client";
 
-import { useActionState } from "react";
-import { handleSignIn } from "./actions";
-import Link from "next/link";
+/* import { useActionState } from "react";
+import { handleSignIn } from "./actions"; */
+//import Link from "next/link";
 
-const initialState = {
+/* const initialState = {
   message: '',
-}
+} */
 
 export default function SignIn() {
-  const [state, formAction, pending] = useActionState(handleSignIn, initialState);
+  //const [state, formAction, pending] = useActionState(handleSignIn, initialState);
 
   return (
     <div
@@ -29,14 +29,17 @@ export default function SignIn() {
           w-96
         "
       >
-        <h1 className="text-lg mb-8 text-center">Acesse o sistema</h1>
+        <h1 className="text-lg text-center">Recuperando Senha</h1>
+        <div className="text-center py-4">
+          <small>Enviaremos um código para o seu e-mail</small>
+        </div>
         <form
           className="
             flex
             flex-col
             gap-4
           "
-          action={formAction}
+          action={() => {}}
         >
           <div
             className="flex flex-col"
@@ -56,21 +59,6 @@ export default function SignIn() {
           <div
             className="flex flex-col"
           >
-            <label>Senha</label>
-            <input
-              type="password"
-              placeholder="Entre com sua senha"
-              className="
-                p-2
-                border
-                rounded
-              "
-              name="password"
-            />
-          </div>
-          <div
-            className="flex flex-col"
-          >
             <button
               className="
                 bg-blue-500
@@ -79,9 +67,9 @@ export default function SignIn() {
                 p-2
                 rounded
               "
-            >{pending ? "Carregando" : "Entrar"}</button>
+            >{"Entrar"}</button>
           </div>
-          {state?.message && (
+          {/* {state?.message && (
             <div
               className="
                 bg-red-500
@@ -93,12 +81,7 @@ export default function SignIn() {
             >
               <span className="text-white font-bold">{state?.message}</span>
             </div>
-          )}
-          <div className="text-center">
-            <Link href={"/forget_password"} className="text-blue-500">Esqueci minha senha</Link>
-            <div className="border border-t-0 border-l-0 border-r-0 my-2"></div>
-            <Link href={"/sign_up"} className="text-blue-500">Criar conta</Link>
-          </div>
+          )} */}
         </form>
       </div>
     </div>

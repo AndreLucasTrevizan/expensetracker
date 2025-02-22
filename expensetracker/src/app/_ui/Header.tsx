@@ -1,8 +1,9 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import HeaderContent from "./HeaderContent";
 import HeaderSignIn from "./HeaderSignIn";
+import HeaderForgetPassword from "./HeaderForgetPassword";
 
 export default function Header() {
   const pathname = usePathname();
@@ -15,8 +16,8 @@ export default function Header() {
         bg-blue-500
       "
     >
-      {pathname !== "/sign_in" && <HeaderContent />}
-      {pathname == "/sign_in" && <HeaderSignIn />}
+      {pathname == "/sign_in" ? <HeaderSignIn /> :
+      pathname == "/forget_password" ? <HeaderForgetPassword /> : <HeaderContent />}
     </div>
   );
 }
