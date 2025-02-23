@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authMiddleware } from '../../middlewares/auth';
-import { createUser, listUsers, userDetails, userSignIn } from './controller';
+import { checkEmail, createUser, listUsers, userDetails, userSignIn } from './controller';
 
 const router = Router();
 
@@ -16,5 +16,9 @@ router
 router
   .route('/sign_in')
   .post(userSignIn);
+
+router
+  .route('/users/send_email_code/:email')
+  .get(checkEmail);
 
 export { router as UsersRouter };

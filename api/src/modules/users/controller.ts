@@ -2,6 +2,36 @@ import { Request, Response } from 'express';
 import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import { prisma } from '../../prisma';
+import { MailtrapClient } from 'mailtrap';
+
+const mailTrapClient = new MailtrapClient({
+  token: String(process.env.MAILTRAP_API_TOKEN),
+});
+
+const sender = {
+  email: "andrelucastrevizan@gmail.com",
+  name: "Mailtrap Test"
+};
+
+const recipients = [
+  {
+    email: "trevizan.al@gmail.com",
+  }
+];
+
+const generateEmailCode = async () => {
+  let date = Date.now().toString();
+
+  let code = '';
+
+  for (let i = 0; i < date.length; i++) {
+    if (i >= 8) {
+      code = code + date[i];
+    }
+  }
+
+  return code;
+}
 
 const retrieved_data = {
   id: true,
@@ -119,4 +149,40 @@ export const userDetails = async (
   });
 
   res.json({ user });
+}
+
+export const checkEmail = async (
+  req: Request,
+  res: Response
+) => {
+
+  const email = req.params.email as string;
+
+  if (!email) {
+    throw new Error("API: Não recebemos o e-mail informado");
+  }
+
+  const user = await prisma.user.findFirst({
+    where: { email },
+  });
+
+  if (!user) {
+    throw new Error("API: Não encontramos nenuma conta com o e-mail informado");
+  }
+
+  let code = await generateEmailCode();
+
+  try {
+    await mailTrapClient.send({
+      from: sender,
+      to: recipients,
+      subject: "E-mail Check Code - Expanse Tracker App",
+      text: `Seu código é: ${code}`,
+      category: "Integration Test"
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.json({ code }).end();
 }

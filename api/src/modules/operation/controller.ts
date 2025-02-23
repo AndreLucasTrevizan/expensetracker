@@ -13,24 +13,43 @@ export const listOperations = async (
   res.json({ operations });
 }
 
+interface OperationType {
+  id: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export const createOperation = async (
   req: Request,
   res: Response,
 ) => {
 
-  const {
-    name
-  } = req.body;
+  const operations = req.body.operations as OperationType[];
 
-  if (name == "") {
-    throw new Error("Preencha o campo nome");
+  if (operations.length == 0) {
+    throw new Error("Preencha o campo operations");
   }
 
-  const new_operation = await prisma.operation.create({
-    data: {
-      name,
+  let error = false;
+  let operation_name = '';
+
+  operations.forEach(async (operation) => {
+    const found_operation = await prisma.operation.findFirst({
+      where: {
+        name: operation.name,
+      }
+    });
+
+    if (found_operation) {
+      error = true;
+      operation_name = operation.name;
     }
   });
 
-  res.status(201).json({ new_operation });
+  if (error) {
+    throw new Error(`Já existe uma operação com esse nome ${operation_name.toUpperCase()}`);
+  } else {
+    res.status(201).json({});
+  }
 }
