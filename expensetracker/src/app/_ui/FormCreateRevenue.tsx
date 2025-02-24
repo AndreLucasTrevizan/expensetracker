@@ -2,11 +2,11 @@
 
 import { useActionState } from "react";
 import { createRevenue } from "../revenue/actions";
+import Error from "./Error";
 
 const initialState = {
   message: ''
 };
-
 
 export default function FormCreateRevenue() {
   const [state, formAction, pending] = useActionState(createRevenue, initialState);
@@ -58,7 +58,7 @@ export default function FormCreateRevenue() {
         >
           <label>Valor</label>
           <input
-            type="number"
+            type="text"
             placeholder="Teeste"
             className="
               border
@@ -81,7 +81,9 @@ export default function FormCreateRevenue() {
           rounded
         "
       >{pending ? "Carregando" : "Criar"}</button>
-      <div>{state?.message}</div>
+      {state?.message && (
+        <Error message={state.message} />
+      )}
     </form>
   );
 }

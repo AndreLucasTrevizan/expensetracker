@@ -73,7 +73,7 @@ function Option({
       "
     >
       {option.icon}
-      <span className='mt-4'>{option.name}</span>
+      <span className='mt-4 hover:text-underline'>{option.name}</span>
     </Link>
   );
 }

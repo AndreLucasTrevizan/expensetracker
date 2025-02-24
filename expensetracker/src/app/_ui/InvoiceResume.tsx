@@ -13,7 +13,12 @@ export default function InvoiceResume() {
         flex-col
       "
     >
-      <h1 className="text-lg mb-4">Cartão de Crédito</h1>
+      <div className="flex justify-between">
+        <h1 className="text-lg mb-4">Cartão de Crédito</h1>
+        <Link href="/" className="text-blue-500 font-bold">
+          <FaChevronRight />
+        </Link>
+      </div>
       <Invoice />
     </div>
   );
@@ -40,9 +45,6 @@ function Invoice() {
         <span>Fatura atual</span>
         <span className="font-bold gap-4">R$ 1.769,23</span>
       </div>
-      <Link href="/" className="text-blue-500 font-bold">
-        <FaChevronRight />
-      </Link>
     </div>
   );
 }

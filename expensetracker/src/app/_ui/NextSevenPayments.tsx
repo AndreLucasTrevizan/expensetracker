@@ -16,7 +16,12 @@ export default function NextSevenPayments() {
         flex-col
       "
     >
-      <h1 className="text-lg mb-4">Pagamentos para os próximos 7 dias</h1>
+      <div className="flex justify-between">
+        <h1 className="text-lg mb-4">Pagamentos para os próximos 7 dias</h1>
+        <Link href="/" className="text-blue-500 font-bold">
+          <FaChevronRight />
+        </Link>
+      </div>
       <Payment />
     </div>
   );
@@ -43,9 +48,6 @@ function Payment() {
         <span>Cama</span>
         <span className="font-bold gap-4">R$ 351,23</span>
       </div>
-      <Link href="/" className="text-blue-500 font-bold">
-        <FaChevronRight />
-      </Link>
     </div>
   );
 }

@@ -44,7 +44,7 @@ export default function HeaderContent() {
       <div
         className={pathname != "/" ? `flex flex-col` : `flex justify-between`}
       >
-        <Link href="/" className="text-2xl text-white font-bold">Expense Tracker</Link>
+        <Link href="/" className="text-2xl text-white font-bold">Expanse Tracker</Link>
         {pathname != "/profile" && <Link href="/profile" className="text-white w-max">Ver Perfil</Link>}
       </div>
     </div>

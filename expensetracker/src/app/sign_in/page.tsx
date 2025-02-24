@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { handleSignIn } from "./actions";
 import Link from "next/link";
+import Error from "../_ui/Error";
 
 const initialState = {
   message: '',
@@ -82,17 +83,7 @@ export default function SignIn() {
             >{pending ? "Carregando" : "Entrar"}</button>
           </div>
           {state?.message && (
-            <div
-              className="
-                bg-red-500
-                p-2
-                flex
-                justify-center
-                rounded
-              "
-            >
-              <span className="text-white font-bold">{state?.message}</span>
-            </div>
+            <Error message={state.message} />
           )}
           <div className="text-center">
             <Link href={"/forget_password"} className="text-blue-500">Esqueci minha senha</Link>

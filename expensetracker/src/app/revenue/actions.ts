@@ -26,10 +26,11 @@ export const createRevenue = async (prevState: { message: string }, formData: Fo
     await api.post("/revenue", revenue, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${serverCookies.get("token")}`,
+        "Authorization": `Bearer ${serverCookies.get("token")?.value}`,
       }
     });
   } catch (error) {
+    console.log(error);
     const errorHandle = new ErrorHandler(error);
 
     return errorHandle;

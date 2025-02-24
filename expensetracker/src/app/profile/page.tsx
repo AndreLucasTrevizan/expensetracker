@@ -1,3 +1,5 @@
+import { UserProfile } from "../_ui/UserProfile";
+
 export default function Profile() {
   return (
     <div
@@ -10,7 +12,8 @@ export default function Profile() {
         flex-col
       "
     >
-      <h1 className="text-lg">Seu perfil</h1>
+      <h1 className="text-xl mb-8">Seu perfil</h1>
+      <UserProfile />
     </div>
   );
 }

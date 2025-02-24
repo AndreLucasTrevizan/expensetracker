@@ -1,6 +1,7 @@
 import OptionsMenu from "./_ui/OptionsMenu";
 import NextSevenPayments from "./_ui/NextSevenPayments";
 import InvoiceResume from "./_ui/InvoiceResume";
+import RevenueSald from "./_ui/RevenueSald";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       "
     >
       <OptionsMenu />
+      <RevenueSald />
       <NextSevenPayments />
       <InvoiceResume />
     </div>

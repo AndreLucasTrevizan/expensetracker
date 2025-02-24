@@ -30,7 +30,7 @@ export default function HeaderForgetPassword() {
           <span className="font-bold text-white">Voltar</span>
         </>
       </div>
-      <h1 className="text-2xl text-white font-bold">Expense Tracker</h1>
+      <h1 className="text-2xl text-white font-bold">Expanse Tracker</h1>
     </div>
   );
 }
